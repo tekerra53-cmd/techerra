@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - TechErra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/preloader.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+            background-color: #efefef;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 5px solid #6b4ce6;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: #efefef;
+        }
+
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .logo img {
+            width: 35%;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+            border: 1px solid #6b4ce6;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: #e8f0ff;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+            background-color: #6b4ce6;
+            padding: 5px 10px;
+            margin: -5px -10px;
+        }
+
+        
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+            padding: 80px 80px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(107, 76, 230, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .last-updated {
+            display: inline-block;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            color: #666;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 80px;
+            background: white;
+            margin-top: -20px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .section h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 30px;
+            background: #6b4ce6;
+            border-radius: 3px;
+        }
+
+        .section h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .section p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section li {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+            border-left: 4px solid #6b4ce6;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: #333;
+        }
+
+        .contact-section {
+            background: #6b4ce6;
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .contact-section h2 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .contact-section h2::before {
+            display: none;
+        }
+
+        .contact-section p {
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 20px;
+        }
+
+        .contact-btn {
+            display: inline-block;
+            background: white;
+            color: #6b4ce6;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        
+        /* Large screens */
+        @media (min-width: 1400px) {
+            nav, .hero, .container {
+                padding-left: 120px;
+                padding-right: 120px;
+            }
+            
+            .container {
+                max-width: 1200px;
+            }
+        }
+
+        /* Medium screens */
+        @media (max-width: 1024px) {
+            nav, .hero, .container {
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+
+            .nav-links {
+                gap: 25px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .section h2 {
+                font-size: 26px;
+            }
+        }
+
+        /* Tablets */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 30px;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 18px;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            .social-icons {
+                gap: 10px;
+            }
+
+            .social-icons a {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+
+            .hero, .container {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+
+            .hero {
+                padding-top: 50px;
+                padding-bottom: 40px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .last-updated {
+                font-size: 13px;
+                padding: 8px 16px;
+            }
+
+            .container {
+                padding-top: 40px;
+                padding-bottom: 40px;
+                margin-top: -15px;
+            }
+
+            .section {
+                margin-bottom: 35px;
+            }
+
+            .section h2 {
+                font-size: 24px;
+                padding-left: 15px;
+            }
+
+            .section h2::before {
+                width: 4px;
+                height: 25px;
+            }
+
+            .section h3 {
+                font-size: 18px;
+            }
+
+            .section p, .section li {
+                font-size: 14px;
+            }
+
+            .highlight-box {
+                padding: 20px;
+            }
+
+            .contact-section {
+                padding: 30px 25px;
+            }
+
+            .contact-section h2 {
+                font-size: 24px;
+            }
+
+            .contact-btn {
+                padding: 10px 25px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobile phones */
+        @media (max-width: 480px) {
+            nav {
+                padding: 12px 20px;
+            }
+
+            .nav-links {
+                font-size: 12px;
+                gap: 10px;
+            }
+
+            .nav-links a {
+                font-size: 11px;
+            }
+
+            .social-icons {
+                display: none;
+            }
+
+            .hero, .container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .hero {
+                padding-top: 40px;
+                padding-bottom: 30px;
+            }
+
+            .hero::before {
+                width: 250px;
+                height: 250px;
+                top: -30px;
+                right: -100px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+                margin-bottom: 12px;
+            }
+
+            .hero p {
+                font-size: 14px;
+                margin-bottom: 20px;
+            }
+
+            .last-updated {
+                font-size: 12px;
+                padding: 7px 14px;
+            }
+
+            .container {
+                padding-top: 30px;
+                padding-bottom: 30px;
+                margin-top: -10px;
+                border-radius: 15px 15px 0 0;
+            }
+
+            .section {
+                margin-bottom: 30px;
+            }
+
+            .section h2 {
+                font-size: 20px;
+                padding-left: 12px;
+                margin-bottom: 15px;
+            }
+
+            .section h2::before {
+                width: 3px;
+                height: 20px;
+            }
+
+            .section h3 {
+                font-size: 16px;
+                margin-top: 20px;
+                margin-bottom: 10px;
+            }
+
+            .section p, .section li {
+                font-size: 13px;
+                line-height: 1.7;
+            }
+
+            .section ul {
+                margin-left: 15px;
+            }
+
+            .highlight-box {
+                padding: 15px;
+                margin: 20px 0;
+            }
+
+            .contact-section {
+                padding: 25px 20px;
+                margin-top: 40px;
+                border-radius: 12px;
+            }
+
+            .contact-section h2 {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+
+            .contact-section p {
+                font-size: 14px;
+                margin-bottom: 15px;
+            }
+
+            .contact-btn {
+                padding: 10px 22px;
+                font-size: 13px;
+            }
+
+            footer {
+                padding: 25px 20px;
+            }
+
+            footer p {
+                font-size: 12px;
+                line-height: 1.6;
+            }
+        }
+
+        /* Extra small phones */
+        @media (max-width: 360px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .section h2 {
+                font-size: 18px;
+            }
+
+            .section h3 {
+                font-size: 15px;
+            }
+
+            .section p, .section li {
+                font-size: 12px;
+            }
+
+            .nav-links {
+                gap: 8px;
+            }
+
+            .nav-links a {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="ambient-glow"></div>
+        
+        <div class="logo-wrapper">
+            <!-- Logo -->
+            <div class="logo">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" >
+                        <!-- Outer hexagon path that draws in -->
+                        <path class="mark-path" d="M24 4L42 14V34L24 44L6 34V14L24 4Z" 
+                              stroke="white" stroke-width="1.5" fill="none"/>
+                        <!-- Inner elements that fade in -->
+                        <g class="mark-fill">
+                            <path d="M24 14L32 19V29L24 34L16 29V19L24 14Z" fill="white" fill-opacity="0.15"/>
+                            <circle cx="24" cy="24" r="4" fill="white"/>
+                        </g>
+                    </svg>
+                </div>
+                <span class="logo-text">TechErra</span>
+            </div>
+
+            <!-- Loader Dots -->
+            <div class="loader-container">
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+            </div>
+        </div>
+
+        <!-- Seasonal Accent -->
+        <div class="seasonal-accent">
+            <span class="seasonal-dot"></span>
+            <span class="seasonal-text">Build, Create &amp; Innovate </span>
+            <span class="seasonal-dot"></span>
+        </div>
+
+        <!-- Progress Line -->
+        <div class="progress-line-container">
+            <div class="progress-line"></div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html">
+            <div class="logo">
+                <img src="images/logo-tech.png" alt="">
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>   
+            </ul>
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Privacy Policy</h1>
+            <p>Your privacy is important to us. Learn how we collect, use, and protect your information.</p>
+            <span class="last-updated">Last Updated: December 19, 2024</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="section">
+            <h2>Introduction</h2>
+            <p>Welcome to TechErra. We respect your privacy and are committed to protecting your personal data. This privacy policy explains how we handle your information when you visit our website and use our services.</p>
+            <div class="highlight-box">
+                <p><strong>Important:</strong> By using our website, you agree to the collection and use of information in accordance with this policy.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Information We Collect</h2>
+            <h3>Personal Information</h3>
+            <p>We may collect the following types of personal information:</p>
+            <ul>
+                <li>Name and contact details (email address, phone number)</li>
+                <li>Company or organization name</li>
+                <li>Project requirements and specifications</li>
+                <li>Communication preferences</li>
+                <li>Any other information you voluntarily provide</li>
+            </ul>
+
+            <h3>Usage Data</h3>
+            <p>We automatically collect certain information when you visit our website, including:</p>
+            <ul>
+                <li>IP address and device information</li>
+                <li>Browser type and version</li>
+                <li>Pages visited and time spent on pages</li>
+                <li>Referring website addresses</li>
+                <li>Operating system information</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>How We Use Your Information</h2>
+            <p>We use the collected information for various purposes:</p>
+            <ul>
+                <li><strong>Service Delivery:</strong> To provide, maintain, and improve our web development and design services</li>
+                <li><strong>Communication:</strong> To respond to your inquiries, provide customer support, and send project updates</li>
+                <li><strong>Analytics:</strong> To understand how visitors use our website and optimize user experience</li>
+                <li><strong>Marketing:</strong> To send you information about our services, portfolio updates, and relevant content (with your consent)</li>
+                <li><strong>Legal Compliance:</strong> To comply with legal obligations and protect our rights</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Data Sharing and Disclosure</h2>
+            <p>We do not sell your personal information. We may share your data only in the following circumstances:</p>
+            <ul>
+                <li><strong>Service Providers:</strong> With trusted third-party services that help us operate our website (hosting, analytics, email services)</li>
+                <li><strong>Legal Requirements:</strong> When required by law or to protect our legal rights</li>
+                <li><strong>Business Transfers:</strong> In connection with any merger, sale, or acquisition of our business</li>
+                <li><strong>With Your Consent:</strong> When you explicitly agree to share your information</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Cookies and Tracking Technologies</h2>
+            <p>We use cookies and similar tracking technologies to enhance your browsing experience. Cookies are small data files stored on your device that help us:</p>
+            <ul>
+                <li>Remember your preferences and settings</li>
+                <li>Understand how you interact with our website</li>
+                <li>Improve website functionality and performance</li>
+                <li>Provide personalized content</li>
+            </ul>
+            <p>You can control cookie settings through your browser preferences. Note that disabling cookies may affect website functionality.</p>
+        </div>
+
+        <div class="section">
+            <h2>Data Security</h2>
+            <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These measures include:</p>
+            <ul>
+                <li>Secure server infrastructure and encrypted data transmission</li>
+                <li>Regular security assessments and updates</li>
+                <li>Access controls and authentication procedures</li>
+                <li>Employee training on data protection practices</li>
+            </ul>
+            <p>However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.</p>
+        </div>
+
+        <div class="section">
+            <h2>Your Rights and Choices</h2>
+            <p>You have the following rights regarding your personal information:</p>
+            <ul>
+                <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
+                <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
+                <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal obligations)</li>
+                <li><strong>Opt-out:</strong> Unsubscribe from marketing communications at any time</li>
+                <li><strong>Data Portability:</strong> Request transfer of your data to another service provider</li>
+                <li><strong>Objection:</strong> Object to processing of your personal data for specific purposes</li>
+            </ul>
+            <p>To exercise these rights, please contact us using the information provided below.</p>
+        </div>
+
+        <div class="section">
+            <h2>Third-Party Links</h2>
+            <p>Our website may contain links to third-party websites, plugins, or services. We are not responsible for the privacy practices of these external sites. We encourage you to review their privacy policies before providing any personal information.</p>
+        </div>
+
+        <div class="section">
+            <h2>Children's Privacy</h2>
+            <p>Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children. If you believe we have inadvertently collected data from a child, please contact us immediately.</p>
+        </div>
+
+        <div class="section">
+            <h2>Data Retention</h2>
+            <p>We retain your personal information only for as long as necessary to fulfill the purposes outlined in this privacy policy, comply with legal obligations, resolve disputes, and enforce our agreements. When data is no longer needed, we securely delete or anonymize it.</p>
+        </div>
+
+        <div class="section">
+            <h2>International Data Transfers</h2>
+            <p>Your information may be transferred to and processed in countries other than your own. We ensure appropriate safeguards are in place to protect your data in accordance with applicable data protection laws.</p>
+        </div>
+
+        <div class="section">
+            <h2>Changes to This Privacy Policy</h2>
+            <p>We may update this privacy policy from time to time to reflect changes in our practices or legal requirements. We will notify you of significant changes by posting the updated policy on our website with a new "Last Updated" date. We encourage you to review this policy periodically.</p>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="contact-section">
+            <h2>Questions or Concerns?</h2>
+            <p>If you have any questions about this privacy policy or how we handle your data, please don't hesitate to reach out via <b>Live chat.</b></p>
+             <!-- Smartsupp Live Chat script -->
+       <!-- Smartsupp Live Chat script -->
+<script type="text/javascript">
+var _smartsupp = _smartsupp || {};
+_smartsupp.key = 'd8b21c1142fdf079963d14e224503cd43f8591d6';
+window.smartsupp||(function(d) {
+ var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+ s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+ c.type='text/javascript';c.charset='utf-8';c.async=true;
+ c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+})(document);
+</script>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 TechErra. All rights reserved. | 
+            <br> <a href="/privacy-policy" style="color: #6b4ce6; text-decoration: none;">Privacy Policy</a></p>
+    </footer>
+
+
+    <script src="js/preloader.js"></script>
+</body>
+</html>
