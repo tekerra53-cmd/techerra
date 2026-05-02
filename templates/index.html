@@ -80,7 +80,7 @@
                 <div class="col-lg-12">
                     <div class="header-content">
                         <div class="logo">
-                            <a href="index.html">
+                            <a href="{{ url_for('home') }}">
 
                                 <img class="logo-white" src="images/logo-tech.png" style="width:100px">
                             </a>
@@ -94,6 +94,7 @@
                                     <li class="nav-item"><a class="smoth-animation" href="#portfolio">Pojects</a></li>
                                     <li class="nav-item"><a class="smoth-animation" href="#contacts">Contact</a></li>
                                     <li class="nav-item"><a class="smoth-animation" href="#blog">Blog</a></li>
+                                    <li class="nav-item"><a href="{{ url_for('admin_login_page') }}">Admin</a></li>
                                 </ul>
                             </nav>
                         </div>
@@ -127,7 +128,7 @@
             <div class="inner">
                 <div class="header-top">
                     <div class="logo">
-                        <a href="index.html" class="logo-area">
+                        <a href="{{ url_for('home') }}" class="logo-area">
                             <img class="logo-white" src="images/logo-tech.png" alt="logo">
                         </a>
                     </div>
@@ -145,6 +146,7 @@
                     <li class="nav-item"><a class="smoth-animation" href="#portfolio">Pojects</a></li>
                     <li class="nav-item"><a class="smoth-animation" href="#contacts">Contact</a></li>
                     <li class="nav-item"><a class="smoth-animation" href="#blog">Blog</a></li>
+                    <li class="nav-item"><a href="{{ url_for('admin_login_page') }}">Admin</a></li>
                 </ul>
 
                 <!-- social sharea area -->
@@ -760,7 +762,7 @@
                             </div>
                             <div class="contact-form">
                                 <div id="form-messages" class="error"></div>
-                                <form class="tmp-dynamic-form" id="contact-form" method="POST" action="mailer.php">
+                                <form class="tmp-dynamic-form" id="contact-form" method="POST" action="#contacts">
                                     <div class="contact-form-wrapper row">
                                        <img src="images/cc2.png" style="width: 50%; height:50%;">
 
@@ -871,7 +873,7 @@
                     <div class="col-lg-5 col-md-6">
                         <div class="single-footer-wrapper border-right mr--20">
                             <div class="logo">
-                                <a href="index.html">
+                                <a href="{{ url_for('home') }}">
                                     <img src="images/logo-tech.png" alt="Reeni - Personal Portfolio HTML Template for developers and freelancers">
                                 </a>
                             </div>
@@ -926,7 +928,7 @@
                         <br>
                         <ul class="tmp-link-animation">
                             
-                            <li><a href="policy.html">Privacy Policy</a></li>
+                            <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
                             
                         </ul>
                     </div>
@@ -988,6 +990,21 @@
 <script src="js/text-type.js"></script>
 <script src="js/main.js"></script>
 <script src="js/preloader.js"></script>
+<script>
+window.TECHERRA_CHAT_CONFIG = {
+    agentName: {{ chat_agent_name|tojson }},
+    agentTitle: {{ chat_agent_title|tojson }},
+    brandColor: {{ chat_brand_color|tojson }},
+    siteName: {{ site_name|tojson }},
+    welcomeTitle: {{ chat_settings.welcomeTitle|tojson }},
+    welcomeText: {{ chat_settings.welcomeText|tojson }},
+    promptTitle: {{ chat_settings.promptTitle|tojson }},
+    promptText: {{ chat_settings.promptText|tojson }},
+    alignment: {{ chat_settings.alignment|tojson }}
+};
+document.documentElement.style.setProperty("--te-chat-brand", {{ chat_brand_color|tojson }});
+document.documentElement.setAttribute("data-te-chat-align", {{ chat_settings.alignment|tojson }});
+</script>
 <script src="js/live-chat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 

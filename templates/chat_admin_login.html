@@ -1,13 +1,9 @@
-<?php
-require_once __DIR__ . '/chat-security.php';
-techerra_block_if_not_allowed();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TechErra Admin Login</title>
+  <title>{{ site_name }} Admin Login</title>
   <style>
     :root {
       --bg1: #eff4fb;
@@ -87,7 +83,7 @@ techerra_block_if_not_allowed();
 </head>
 <body>
   <div class="card">
-    <h1>Admin Login</h1>
+    <h1>{{ site_name }} Admin Login</h1>
     <p>Sign in to manage visitor chats and notifications.</p>
     <label for="password">Password</label>
     <input id="password" type="password" autocomplete="current-password" />
@@ -97,7 +93,7 @@ techerra_block_if_not_allowed();
 
   <script>
     (function () {
-      var API = "chat-api.php";
+      var API = "{{ url_for('chat_api') }}";
       var btn = document.getElementById("loginBtn");
       var input = document.getElementById("password");
       var error = document.getElementById("error");
@@ -123,7 +119,7 @@ techerra_block_if_not_allowed();
       function checkAuth() {
         req("admin_status").then(function (res) {
           if (res && res.ok && res.authenticated) {
-            window.location.href = "chat-admin.php";
+            window.location.href = "{{ url_for('admin_chat_page') }}";
           }
         });
       }
@@ -139,7 +135,7 @@ techerra_block_if_not_allowed();
 
         req("admin_login", { password: password }).then(function (res) {
           if (res && res.ok) {
-            window.location.href = "chat-admin.php";
+            window.location.href = "{{ url_for('admin_chat_page') }}";
             return;
           }
           showError((res && res.error) || "Login failed.");

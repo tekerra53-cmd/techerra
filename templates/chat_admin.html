@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ site_name }} Chat Admin</title>
+  <style>
+    :root {
+      --bg: #eef4f8;
+      --panel: #ffffff;
+      --panel-soft: #f7fafc;
+      --line: #dbe4ee;
+      --text: #122033;
+      --muted: #64748b;
+      --brand: #0f4c81;
+      --brand-2: #1f76b8;
+      --danger: #d93025;
+      --success: #1d9d57;
+      --shadow: 0 24px 60px rgba(16, 39, 60, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(31, 118, 184, 0.08), transparent 28%),
+        linear-gradient(180deg, #f6fbff 0%, var(--bg) 100%);
+    }
+    .topbar {
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid rgba(219, 228, 238, 0.8);
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .topbar-copy h1 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+    .topbar-copy p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .stats {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .pill {
+      background: #edf4fb;
+      color: #13304f;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .action-btn {
+      border: 1px solid #c6d5e4;
+      background: #fff;
+      color: #12304f;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .action-btn.primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff;
+      border-color: transparent;
+    }
+    .action-btn.active {
+      background: #e8eff7;
+      border-color: #a9c1da;
+    }
+    .shell {
+      display: grid;
+      grid-template-columns: 360px minmax(0, 1fr) 300px;
+      gap: 18px;
+      padding: 18px;
+      min-height: calc(100vh - 88px);
+    }
+    .panel {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(219, 228, 238, 0.95);
+      box-shadow: var(--shadow);
+      border-radius: 22px;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .sidebar-head,
+    .main-head,
+    .detail-head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(247, 250, 252, 0.92);
+    }
+    .sidebar-head h2,
+    .detail-head h2 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+    .sidebar-head p,
+    .detail-head p,
+    .main-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .search-wrap {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+    .search-wrap input {
+      width: 100%;
+      border: 1px solid #cfdae5;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 13px;
+      background: var(--panel-soft);
+    }
+    .chat-list {
+      overflow: auto;
+      max-height: calc(100vh - 250px);
+    }
+    .chat-item {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+    .chat-item:hover,
+    .chat-item.active {
+      background: #f1f7fd;
+    }
+    .chat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .chat-name {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .chat-preview,
+    .chat-page {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-page {
+      margin-top: 4px;
+      font-size: 11px;
+    }
+    .chat-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge {
+      background: var(--danger);
+      color: #fff;
+      border-radius: 999px;
+      min-width: 22px;
+      text-align: center;
+      font-size: 11px;
+      padding: 3px 7px;
+      font-weight: 700;
+    }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--success);
+    }
+    .status.closed::before {
+      background: #9ca8b5;
+    }
+    .status.solved::before {
+      background: #2563eb;
+    }
+    .main {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 0;
+    }
+    .main-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .main-head h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+    .main-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .messages {
+      padding: 18px;
+      overflow: auto;
+      background:
+        linear-gradient(180deg, rgba(248, 251, 255, 0.96) 0%, rgba(241, 247, 252, 0.96) 100%);
+      min-height: 0;
+    }
+    .empty-state {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      padding: 18px;
+    }
+    .message-row {
+      display: flex;
+      margin-bottom: 12px;
+    }
+    .message-row.agent {
+      justify-content: flex-end;
+    }
+    .bubble {
+      max-width: 78%;
+      padding: 12px 14px;
+      border-radius: 18px;
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.5;
+      box-shadow: 0 10px 24px rgba(16, 39, 60, 0.06);
+    }
+    .bubble.visitor {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-bottom-left-radius: 5px;
+    }
+    .bubble.agent {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff;
+      border-bottom-right-radius: 5px;
+    }
+    .bubble-meta {
+      display: block;
+      margin-top: 7px;
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    .composer {
+      border-top: 1px solid var(--line);
+      background: #fff;
+      padding: 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .composer textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      min-height: 54px;
+      max-height: 140px;
+      resize: none;
+      font-family: inherit;
+    }
+    .composer button {
+      border: 0;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      color: #fff;
+      padding: 0 18px;
+      height: 54px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .composer button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .detail-grid {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+    .detail-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      background: #fff;
+    }
+    .detail-card label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .detail-card div,
+    .detail-card a {
+      color: var(--text);
+      font-size: 13px;
+      word-break: break-word;
+      text-decoration: none;
+    }
+    .detail-card a {
+      color: var(--brand);
+    }
+    .settings-form {
+      display: grid;
+      gap: 10px;
+    }
+    .settings-form input,
+    .settings-form textarea,
+    .settings-form select {
+      width: 100%;
+      border: 1px solid #cfdae5;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12px;
+      background: var(--panel-soft);
+      font-family: inherit;
+    }
+    .settings-form textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+    .settings-row {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .settings-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+    .hidden {
+      display: none !important;
+    }
+    @media (max-width: 1250px) {
+      .shell {
+        grid-template-columns: 330px minmax(0, 1fr);
+      }
+      .details {
+        grid-column: 1 / -1;
+      }
+    }
+    @media (max-width: 860px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .stats {
+        justify-content: flex-start;
+      }
+      .shell {
+        grid-template-columns: 1fr;
+      }
+      .chat-list {
+        max-height: 35vh;
+      }
+      .bubble {
+        max-width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-copy">
+      <h1>{{ site_name }} Live Chat</h1>
+      <p>Monitor visitors, reply faster, and receive live support alerts.</p>
+    </div>
+    <div class="stats">
+      <span class="pill" id="statOpen">Open: 0</span>
+      <span class="pill" id="statVisitors">Visitors: 0</span>
+      <span class="pill" id="statUnread">Unread: 0</span>
+      <button class="action-btn" id="enableAlertsBtn" type="button">Enable Alerts</button>
+      <button class="action-btn" id="muteBtn" type="button">Mute Sound</button>
+      <button class="action-btn" id="testAlertBtn" type="button">Test Alert</button>
+      <button class="action-btn" id="testEmailBtn" type="button">Test Email</button>
+      <button class="action-btn" id="testTelegramBtn" type="button">Test Telegram</button>
+      <button class="action-btn" id="logoutBtn" type="button">Logout</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <aside class="panel sidebar">
+      <div class="sidebar-head">
+        <h2>Inbox</h2>
+        <p>Incoming visitor conversations and support requests.</p>
+      </div>
+      <div class="search-wrap">
+        <input id="searchInput" type="text" placeholder="Search by visitor, email, page, or message" />
+      </div>
+      <div class="chat-list" id="chatList"></div>
+    </aside>
+
+    <section class="panel main">
+      <div class="main-head">
+        <div>
+          <h2 id="activeTitle">Select a conversation</h2>
+          <p id="activeMeta">Choose a visitor from the inbox to open the conversation.</p>
+        </div>
+        <div class="main-actions">
+          <button class="action-btn" id="copyPageBtn" type="button">Copy Page Link</button>
+          <button class="action-btn hidden" id="solveChatBtn" type="button">Mark Solved</button>
+          <button class="action-btn primary hidden" id="toggleStatus" type="button">Close Chat</button>
+        </div>
+      </div>
+      <div class="messages" id="messages">
+        <div class="empty-state" id="emptyState">No conversation selected yet.</div>
+      </div>
+      <div class="composer">
+        <textarea id="replyInput" placeholder="Reply as {{ chat_agent_name }}"></textarea>
+        <button id="replyBtn" type="button">Send</button>
+      </div>
+    </section>
+
+    <aside class="panel details">
+      <div class="detail-head">
+        <h2>Visitor Details</h2>
+        <p>Support context for the selected visitor and page.</p>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <label>Name</label>
+          <div id="detailName">No visitor selected</div>
+        </div>
+        <div class="detail-card">
+          <label>Visitor ID</label>
+          <div id="detailId">n/a</div>
+        </div>
+        <div class="detail-card">
+          <label>Email</label>
+          <div id="detailEmail">n/a</div>
+        </div>
+        <div class="detail-card">
+          <label>Current Page</label>
+          <a id="detailPage" href="#" target="_blank" rel="noopener noreferrer">n/a</a>
+        </div>
+        <div class="detail-card">
+          <label>First Seen</label>
+          <div id="detailFirstSeen">n/a</div>
+        </div>
+        <div class="detail-card">
+          <label>Last Active</label>
+          <div id="detailLastSeen">n/a</div>
+        </div>
+        <div class="detail-card">
+          <label>Status</label>
+          <div id="detailStatus">n/a</div>
+        </div>
+        <div class="detail-card">
+          <label>Chat Customization</label>
+          <div class="settings-form">
+            <div class="settings-row">
+              <input id="settingAgentName" type="text" placeholder="Agent name" />
+              <input id="settingBrandColor" type="text" placeholder="#0f4c81" />
+            </div>
+            <div class="settings-row">
+              <input id="settingAgentTitle" type="text" placeholder="Agent title" />
+              <select id="settingAlignment">
+                <option value="right">Right</option>
+                <option value="left">Left</option>
+              </select>
+            </div>
+            <input id="settingWelcomeTitle" type="text" placeholder="Welcome title" />
+            <textarea id="settingWelcomeText" placeholder="Welcome message"></textarea>
+            <div class="settings-row">
+              <input id="settingPromptTitle" type="text" placeholder="Prompt title" />
+              <input id="settingPromptText" type="text" placeholder="Prompt text" />
+            </div>
+            <div class="settings-actions">
+              <button class="action-btn primary" id="saveSettingsBtn" type="button">Save Theme</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <audio id="alertAudio" preload="auto">
+    <source src="{{ url_for('static', filename=chat_alert_sound) }}" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    (function () {
+      var API = "{{ url_for('chat_api') }}";
+      var state = {
+        chats: [],
+        filteredChats: [],
+        activeId: "",
+        lastMessageId: 0,
+        unreadByVisitor: {},
+        bootstrapped: false,
+        soundMuted: localStorage.getItem("techerra_admin_sound_muted") === "1",
+        search: ""
+      };
+
+      var chatList = document.getElementById("chatList");
+      var messages = document.getElementById("messages");
+      var emptyState = document.getElementById("emptyState");
+      var activeTitle = document.getElementById("activeTitle");
+      var activeMeta = document.getElementById("activeMeta");
+      var replyInput = document.getElementById("replyInput");
+      var replyBtn = document.getElementById("replyBtn");
+      var toggleStatus = document.getElementById("toggleStatus");
+      var solveChatBtn = document.getElementById("solveChatBtn");
+      var copyPageBtn = document.getElementById("copyPageBtn");
+      var enableAlertsBtn = document.getElementById("enableAlertsBtn");
+      var muteBtn = document.getElementById("muteBtn");
+      var testAlertBtn = document.getElementById("testAlertBtn");
+      var testEmailBtn = document.getElementById("testEmailBtn");
+      var testTelegramBtn = document.getElementById("testTelegramBtn");
+      var logoutBtn = document.getElementById("logoutBtn");
+      var searchInput = document.getElementById("searchInput");
+      var detailName = document.getElementById("detailName");
+      var detailId = document.getElementById("detailId");
+      var detailEmail = document.getElementById("detailEmail");
+      var detailPage = document.getElementById("detailPage");
+      var detailFirstSeen = document.getElementById("detailFirstSeen");
+      var detailLastSeen = document.getElementById("detailLastSeen");
+      var detailStatus = document.getElementById("detailStatus");
+      var settingAgentName = document.getElementById("settingAgentName");
+      var settingBrandColor = document.getElementById("settingBrandColor");
+      var settingAgentTitle = document.getElementById("settingAgentTitle");
+      var settingAlignment = document.getElementById("settingAlignment");
+      var settingWelcomeTitle = document.getElementById("settingWelcomeTitle");
+      var settingWelcomeText = document.getElementById("settingWelcomeText");
+      var settingPromptTitle = document.getElementById("settingPromptTitle");
+      var settingPromptText = document.getElementById("settingPromptText");
+      var saveSettingsBtn = document.getElementById("saveSettingsBtn");
+      var alertAudio = document.getElementById("alertAudio");
+
+      function req(action, payload) {
+        var body = Object.assign({ action: action }, payload || {});
+        return fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        }).then(function (r) {
+          return r.json().catch(function () {
+            return { ok: false, error: "HTTP " + r.status };
+          }).then(function (data) {
+            if (!r.ok) {
+              throw new Error(data && data.error ? data.error : ("HTTP " + r.status));
+            }
+            return data;
+          });
+        });
+      }
+
+      function esc(text) {
+        return String(text || "").replace(/[&<>\"]/g, function (c) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c];
+        });
+      }
+
+      function formatDate(value) {
+        if (!value) return "n/a";
+        var parsed = new Date(String(value).replace(" ", "T") + "Z");
+        if (Number.isNaN(parsed.getTime())) return value;
+        return parsed.toLocaleString();
+      }
+
+      function fillSettings(settings) {
+        var data = settings || {};
+        settingAgentName.value = data.agentName || "";
+        settingBrandColor.value = data.brandColor || "";
+        settingAgentTitle.value = data.agentTitle || "";
+        settingAlignment.value = data.alignment || "right";
+        settingWelcomeTitle.value = data.welcomeTitle || "";
+        settingWelcomeText.value = data.welcomeText || "";
+        settingPromptTitle.value = data.promptTitle || "";
+        settingPromptText.value = data.promptText || "";
+      }
+
+      function autoResize() {
+        replyInput.style.height = "auto";
+        replyInput.style.height = Math.min(replyInput.scrollHeight, 140) + "px";
+      }
+
+      function activeChat() {
+        return state.chats.find(function (x) { return x.id === state.activeId; }) || null;
+      }
+
+      function applySearch() {
+        var term = state.search.trim().toLowerCase();
+        if (!term) {
+          state.filteredChats = state.chats.slice();
+          return;
+        }
+        state.filteredChats = state.chats.filter(function (chat) {
+          return [
+            chat.name,
+            chat.email,
+            chat.last_page,
+            chat.last_message
+          ].join(" ").toLowerCase().indexOf(term) !== -1;
+        });
+      }
+
+      function renderList() {
+        applySearch();
+        if (!state.filteredChats.length) {
+          chatList.innerHTML = '<div class="empty-state">No conversations match your search.</div>';
+          return;
+        }
+
+        chatList.innerHTML = state.filteredChats.map(function (c) {
+          var active = c.id === state.activeId ? "active" : "";
+          var unread = c.unread_for_agent > 0 ? '<span class="badge">' + c.unread_for_agent + '</span>' : "";
+          var statusClass = c.status === "solved" ? "status solved" : (c.status === "open" ? "status" : "status closed");
+          return '' +
+            '<div class="chat-item ' + active + '" data-id="' + c.id + '">' +
+              '<div class="chat-row">' +
+                '<div class="chat-name">' + esc(c.name || "Visitor") + '</div>' +
+                '<div class="chat-badges">' +
+                  '<span class="' + statusClass + '">' + esc(c.status || "open") + '</span>' +
+                  unread +
+                '</div>' +
+              '</div>' +
+              '<p class="chat-preview">' + esc(c.last_message || "No messages yet") + '</p>' +
+              '<p class="chat-page">' + esc(c.last_page || "No page tracked yet") + '</p>' +
+            '</div>';
+        }).join("");
+
+        [].slice.call(chatList.querySelectorAll(".chat-item")).forEach(function (node) {
+          node.addEventListener("click", function () {
+            state.activeId = node.getAttribute("data-id") || "";
+            state.lastMessageId = 0;
+            messages.innerHTML = "";
+            emptyState = null;
+            renderList();
+            syncHead();
+            fetchMessages();
+          });
+        });
+      }
+
+      function syncDetailPanel(chat) {
+        if (!chat) {
+          detailName.textContent = "No visitor selected";
+          detailId.textContent = "n/a";
+          detailEmail.textContent = "n/a";
+          detailPage.textContent = "n/a";
+          detailPage.href = "#";
+          detailFirstSeen.textContent = "n/a";
+          detailLastSeen.textContent = "n/a";
+          detailStatus.textContent = "n/a";
+          return;
+        }
+        detailName.textContent = chat.name || "Visitor";
+        detailId.textContent = chat.id || "n/a";
+        detailEmail.textContent = chat.email || "n/a";
+        detailPage.textContent = chat.page_url || chat.last_page || "n/a";
+        detailPage.href = chat.page_url || "#";
+        detailFirstSeen.textContent = formatDate(chat.first_seen_at);
+        detailLastSeen.textContent = formatDate(chat.last_seen_at);
+        detailStatus.textContent = chat.status || "open";
+      }
+
+      function syncHead() {
+        var chat = activeChat();
+        if (!chat) {
+          activeTitle.textContent = "Select a conversation";
+          activeMeta.textContent = "Choose a visitor from the inbox to open the conversation.";
+          toggleStatus.classList.add("hidden");
+          solveChatBtn.classList.add("hidden");
+          copyPageBtn.disabled = true;
+          syncDetailPanel(null);
+          return;
+        }
+        activeTitle.textContent = chat.name || "Visitor";
+        activeMeta.textContent = [
+          chat.email || "no email",
+          "first seen " + formatDate(chat.first_seen_at),
+          "last active " + formatDate(chat.last_seen_at)
+        ].join(" • ");
+        toggleStatus.classList.remove("hidden");
+        solveChatBtn.classList.remove("hidden");
+        toggleStatus.textContent = chat.status === "open" ? "Close Chat" : "Reopen Chat";
+        solveChatBtn.textContent = chat.status === "solved" ? "Solved" : "Mark Solved";
+        solveChatBtn.disabled = chat.status === "solved";
+        copyPageBtn.disabled = false;
+        syncDetailPanel(chat);
+      }
+
+      function appendBubble(sender, body, createdAt) {
+        if (emptyState && emptyState.parentNode) {
+          emptyState.parentNode.removeChild(emptyState);
+          emptyState = null;
+        }
+        var row = document.createElement("div");
+        row.className = "message-row " + sender;
+        row.innerHTML =
+          '<div class="bubble ' + sender + '">' +
+            esc(body).replace(/\n/g, "<br>") +
+            '<span class="bubble-meta">' + (sender === "agent" ? "{{ chat_agent_name }}" : "Visitor") + " • " + esc(formatDate(createdAt)) + "</span>" +
+          "</div>";
+        messages.appendChild(row);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function fetchMessages() {
+        if (!state.activeId) return;
+        req("fetch", { visitor_id: state.activeId, since_id: state.lastMessageId, role: "agent" }).then(function (res) {
+          if (!res || !res.ok) return;
+          (res.messages || []).forEach(function (m) {
+            appendBubble(m.sender, m.body, m.created_at);
+          });
+          state.lastMessageId = Math.max(state.lastMessageId, res.last_id || 0);
+        }).catch(function () {
+          window.location.href = "{{ url_for('admin_login_page') }}";
+        });
+      }
+
+      function fetchChats() {
+        req("list").then(function (res) {
+          if (!res || !res.ok) {
+            if (res && res.error === "Unauthorized") {
+              window.location.href = "{{ url_for('admin_login_page') }}";
+            }
+            return;
+          }
+          state.chats = res.items || [];
+          if (!state.activeId && state.chats.length) {
+            state.activeId = state.chats[0].id;
+          }
+          detectNewVisitorMessages(state.chats);
+          renderList();
+          syncHead();
+          fetchStats();
+          state.bootstrapped = true;
+        }).catch(function () {
+          window.location.href = "{{ url_for('admin_login_page') }}";
+        });
+      }
+
+      function fetchStats() {
+        req("stats").then(function (res) {
+          if (!res || !res.ok || !res.stats) return;
+          document.getElementById("statOpen").textContent = "Open: " + res.stats.open_chats;
+          document.getElementById("statVisitors").textContent = "Visitors: " + res.stats.total_visitors;
+          document.getElementById("statUnread").textContent = "Unread: " + res.stats.unread_messages;
+          document.title = res.stats.unread_messages > 0
+            ? "(" + res.stats.unread_messages + ") {{ site_name }} Chat Admin"
+            : "{{ site_name }} Chat Admin";
+        });
+      }
+
+      function loadChatSettings() {
+        req("get_chat_settings").then(function (res) {
+          if (!res || !res.ok) return;
+          fillSettings(res.settings || {});
+        });
+      }
+
+      function alertPermissionGranted() {
+        return "Notification" in window && Notification.permission === "granted";
+      }
+
+      function updateAlertsButton() {
+        if (!("Notification" in window)) {
+          enableAlertsBtn.style.display = "none";
+          return;
+        }
+        if (Notification.permission === "granted") {
+          enableAlertsBtn.textContent = "Alerts Enabled";
+          enableAlertsBtn.disabled = true;
+          enableAlertsBtn.style.opacity = "0.7";
+          return;
+        }
+        enableAlertsBtn.textContent = "Enable Alerts";
+        enableAlertsBtn.disabled = false;
+        enableAlertsBtn.style.opacity = "1";
+      }
+
+      function playAlertSound() {
+        if (state.soundMuted) return;
+        try {
+          if (!alertAudio) return;
+          alertAudio.pause();
+          alertAudio.currentTime = 0;
+          var playPromise = alertAudio.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(function () {});
+          }
+        } catch (e) {}
+      }
+
+      function fireDesktopNotification(title, body) {
+        if (!alertPermissionGranted()) return;
+        try {
+          new Notification(title, { body: body });
+        } catch (e) {}
+      }
+
+      function detectNewVisitorMessages(chats) {
+        chats.forEach(function (chat) {
+          var prev = Number(state.unreadByVisitor[chat.id] || 0);
+          var curr = Number(chat.unread_for_agent || 0);
+          state.unreadByVisitor[chat.id] = curr;
+          if (!state.bootstrapped) return;
+          if (curr > prev) {
+            playAlertSound();
+            fireDesktopNotification("New visitor message: " + (chat.name || "Visitor"), chat.last_message || "A new message arrived.");
+          }
+        });
+      }
+
+      function sendReply() {
+        if (!state.activeId) return;
+        var message = replyInput.value.trim();
+        if (!message) return;
+        replyBtn.disabled = true;
+
+        req("admin_send", { visitor_id: state.activeId, message: message }).then(function (res) {
+          if (res && res.ok) {
+            replyInput.value = "";
+            autoResize();
+            appendBubble("agent", message, new Date().toISOString());
+            fetchChats();
+          }
+        }).finally(function () {
+          replyBtn.disabled = false;
+          replyInput.focus();
+        });
+      }
+
+      replyBtn.addEventListener("click", sendReply);
+      replyInput.addEventListener("input", autoResize);
+      replyInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          sendReply();
+        }
+      });
+
+      toggleStatus.addEventListener("click", function () {
+        var chat = activeChat();
+        if (!chat) return;
+        var next = chat.status === "open" ? "closed" : "open";
+        req("set_status", { visitor_id: chat.id, status: next }).then(function () {
+          fetchChats();
+        });
+      });
+
+      solveChatBtn.addEventListener("click", function () {
+        var chat = activeChat();
+        if (!chat) return;
+        req("set_status", { visitor_id: chat.id, status: "solved" }).then(function () {
+          fetchChats();
+        });
+      });
+
+      saveSettingsBtn.addEventListener("click", function () {
+        saveSettingsBtn.disabled = true;
+        req("update_chat_settings", {
+          settings: {
+            agentName: settingAgentName.value,
+            brandColor: settingBrandColor.value,
+            agentTitle: settingAgentTitle.value,
+            alignment: settingAlignment.value,
+            welcomeTitle: settingWelcomeTitle.value,
+            welcomeText: settingWelcomeText.value,
+            promptTitle: settingPromptTitle.value,
+            promptText: settingPromptText.value
+          }
+        }).then(function (res) {
+          if (!res || !res.ok) return;
+          fillSettings(res.settings || {});
+          saveSettingsBtn.textContent = "Saved";
+        }).finally(function () {
+          window.setTimeout(function () {
+            saveSettingsBtn.disabled = false;
+            saveSettingsBtn.textContent = "Save Theme";
+          }, 1400);
+        });
+      });
+
+      copyPageBtn.addEventListener("click", function () {
+        var chat = activeChat();
+        if (!chat || !chat.page_url) return;
+        navigator.clipboard.writeText(chat.page_url).then(function () {
+          copyPageBtn.textContent = "Copied";
+          window.setTimeout(function () {
+            copyPageBtn.textContent = "Copy Page Link";
+          }, 1200);
+        });
+      });
+
+      enableAlertsBtn.addEventListener("click", function () {
+        if (!("Notification" in window)) return;
+        Notification.requestPermission().finally(updateAlertsButton);
+      });
+
+      function updateMuteButton() {
+        if (state.soundMuted) {
+          muteBtn.textContent = "Unmute Sound";
+          muteBtn.classList.add("active");
+        } else {
+          muteBtn.textContent = "Mute Sound";
+          muteBtn.classList.remove("active");
+        }
+      }
+
+      muteBtn.addEventListener("click", function () {
+        state.soundMuted = !state.soundMuted;
+        localStorage.setItem("techerra_admin_sound_muted", state.soundMuted ? "1" : "0");
+        updateMuteButton();
+      });
+
+      testAlertBtn.addEventListener("click", function () {
+        playAlertSound();
+        fireDesktopNotification("{{ site_name }} Test", "Desktop notifications are active.");
+      });
+
+      testEmailBtn.addEventListener("click", function () {
+        testEmailBtn.disabled = true;
+        var originalText = testEmailBtn.textContent;
+        req("send_test_email").then(function (res) {
+          if (res && res.ok) {
+            testEmailBtn.textContent = "Email Sent";
+            fireDesktopNotification("{{ site_name }} Email Test", res.message || "Test email sent.");
+            return;
+          }
+          testEmailBtn.textContent = "Email Failed";
+        }).catch(function (err) {
+          testEmailBtn.textContent = "Email Failed";
+          window.alert(err && err.message ? err.message : "Test email failed.");
+        }).finally(function () {
+          window.setTimeout(function () {
+            testEmailBtn.disabled = false;
+            testEmailBtn.textContent = originalText;
+          }, 1800);
+        });
+      });
+
+      testTelegramBtn.addEventListener("click", function () {
+        testTelegramBtn.disabled = true;
+        var originalText = testTelegramBtn.textContent;
+        req("send_test_telegram").then(function (res) {
+          if (res && res.ok) {
+            testTelegramBtn.textContent = "Telegram Sent";
+            fireDesktopNotification("{{ site_name }} Telegram Test", res.message || "Test Telegram alert sent.");
+            return;
+          }
+          testTelegramBtn.textContent = "Telegram Failed";
+        }).catch(function (err) {
+          testTelegramBtn.textContent = "Telegram Failed";
+          window.alert(err && err.message ? err.message : "Test Telegram alert failed.");
+        }).finally(function () {
+          window.setTimeout(function () {
+            testTelegramBtn.disabled = false;
+            testTelegramBtn.textContent = originalText;
+          }, 1800);
+        });
+      });
+
+      logoutBtn.addEventListener("click", function () {
+        req("admin_logout").finally(function () {
+          window.location.href = "{{ url_for('admin_login_page') }}";
+        });
+      });
+
+      searchInput.addEventListener("input", function () {
+        state.search = searchInput.value || "";
+        renderList();
+      });
+
+      req("admin_status").then(function (res) {
+        if (!res || !res.ok || !res.authenticated) {
+          window.location.href = "{{ url_for('admin_login_page') }}";
+          return;
+        }
+        updateMuteButton();
+        updateAlertsButton();
+        autoResize();
+        loadChatSettings();
+        fetchChats();
+        window.setInterval(function () {
+          fetchChats();
+          fetchMessages();
+        }, 4000);
+      }).catch(function () {
+        window.location.href = "{{ url_for('admin_login_page') }}";
+      });
+    })();
+  </script>
+</body>
+</html>

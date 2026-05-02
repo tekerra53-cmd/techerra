@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+chat.sqlite
+chat.sqlite-shm
+chat.sqlite-wal
+
+.vscode/
+.DS_Store
+Thumbs.db
