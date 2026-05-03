@@ -643,6 +643,11 @@ def home():
     )
 
 
+@app.route("/health")
+def health():
+    return jsonify({"ok": True, "status": "healthy", "site": SITE_NAME}), 200
+
+
 @app.route("/policy.html")
 @app.route("/privacy-policy")
 def privacy_policy():
