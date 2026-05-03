@@ -648,6 +648,21 @@ def health():
     return jsonify({"ok": True, "status": "healthy", "site": SITE_NAME}), 200
 
 
+@app.route("/admin/network-check")
+def admin_network_check():
+    return jsonify(
+        {
+            "ok": True,
+            "allowed": admin_network_allowed(),
+            "current_host": current_host(),
+            "client_ip": client_ip(),
+            "allowed_hosts": sorted(ADMIN_ALLOWED_HOSTS),
+            "allowed_ips": sorted(ADMIN_ALLOWED_IPS),
+            "restriction_enabled": ADMIN_ENFORCE_NETWORK_RESTRICTION,
+        }
+    ), 200
+
+
 @app.route("/policy.html")
 @app.route("/privacy-policy")
 def privacy_policy():
