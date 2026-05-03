@@ -231,20 +231,32 @@ def req_param(key, default=None):
 
 
 def current_host():
-    host = (request.host or "").split(":", 1)[0].strip().lower()
+    forwarded_host = (request.headers.get("X-Forwarded-Host") or "").split(",", 1)[0].strip()
+    host_value = forwarded_host or (request.host or "")
+    host = host_value.split(":", 1)[0].strip().lower()
     return host
 
 
 def client_ip():
-    return (request.remote_addr or "").strip()
+    forwarded_for = (request.headers.get("X-Forwarded-For") or "").split(",", 1)[0].strip()
+    real_ip = (request.headers.get("X-Real-IP") or "").strip()
+    return forwarded_for or real_ip or (request.remote_addr or "").strip()
 
 
 def admin_network_allowed():
     if not ADMIN_ENFORCE_NETWORK_RESTRICTION:
         return True
-    host_ok = not ADMIN_ALLOWED_HOSTS or current_host() in ADMIN_ALLOWED_HOSTS
-    ip_ok = not ADMIN_ALLOWED_IPS or client_ip() in ADMIN_ALLOWED_IPS
-    return host_ok and ip_ok
+    host_restricted = bool(ADMIN_ALLOWED_HOSTS)
+    ip_restricted = bool(ADMIN_ALLOWED_IPS)
+    host_ok = current_host() in ADMIN_ALLOWED_HOSTS if host_restricted else False
+    ip_ok = client_ip() in ADMIN_ALLOWED_IPS if ip_restricted else False
+    if host_restricted and ip_restricted:
+        return host_ok or ip_ok
+    if host_restricted:
+        return host_ok
+    if ip_restricted:
+        return ip_ok
+    return True
 
 
 def block_if_not_allowed():
