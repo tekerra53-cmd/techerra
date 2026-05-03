@@ -1,4 +1,5 @@
 import hashlib
+import ipaddress
 import os
 import secrets
 import smtplib
@@ -243,13 +244,39 @@ def client_ip():
     return forwarded_for or real_ip or (request.remote_addr or "").strip()
 
 
+def ip_allowed(ip_value, allowed_entries):
+    ip_text = str(ip_value or "").strip()
+    if not ip_text:
+        return False
+    try:
+        address = ipaddress.ip_address(ip_text)
+    except ValueError:
+        return False
+
+    for entry in allowed_entries:
+        candidate = str(entry or "").strip()
+        if not candidate:
+            continue
+        if "/" in candidate:
+            try:
+                network = ipaddress.ip_network(candidate, strict=False)
+            except ValueError:
+                continue
+            if address in network:
+                return True
+            continue
+        if candidate == ip_text:
+            return True
+    return False
+
+
 def admin_network_allowed():
     if not ADMIN_ENFORCE_NETWORK_RESTRICTION:
         return True
     host_restricted = bool(ADMIN_ALLOWED_HOSTS)
     ip_restricted = bool(ADMIN_ALLOWED_IPS)
     host_ok = current_host() in ADMIN_ALLOWED_HOSTS if host_restricted else False
-    ip_ok = client_ip() in ADMIN_ALLOWED_IPS if ip_restricted else False
+    ip_ok = ip_allowed(client_ip(), ADMIN_ALLOWED_IPS) if ip_restricted else False
     if host_restricted and ip_restricted:
         return host_ok or ip_ok
     if host_restricted:
